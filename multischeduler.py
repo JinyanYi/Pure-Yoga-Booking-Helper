@@ -7,7 +7,7 @@ import sys
 import datetime
 import concurrent.futures
 
-def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=100):
+def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=500):
     url = 'https://pure360-api.pure-yoga.cn/api/v3/booking'
     headers = {
         'Accept': 'application/json, text/plain, */*',
