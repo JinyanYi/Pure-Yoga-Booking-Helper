@@ -70,13 +70,15 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=500):
                 elif error_code == 424:
                     print(f"此课堂的上课时间与您已预约的其他课堂/工作坊/活动时间重叠。如果您在应用程序内找不到该记录, 请向PURE团队查询。课程编号: {class_id}")
                     booking_success = True
+                elif error_code == 426:
+                    print(f"目前无法进行预约, 预约时间为 9-11点, 重试中")
                 else:
                     # Other error codes that we should retry
                     print(f"预约失败, 课程编号: {class_id}, 错误代码: {error_code}")
             else:
                 print(f"课程编号: {class_id}, 无法预约, 请确认课程编号是否正确")
             
-            print(response.text)
+            # print(response.text)
             print(f"发送请求总耗时: {after - before}s")
             
             # Increment retry counter if booking was not successful
