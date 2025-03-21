@@ -49,9 +49,9 @@ def main():
         return
 
     # Get early milliseconds
-    early = input("提前多少毫秒抢课 (直接按回车使用默认值500毫秒): ").strip()
+    early = input("提前多少毫秒抢课 (直接按回车使用默认值900毫秒): ").strip()
     if not early:
-        early = "500"
+        early = "900"
     try:
         early = int(early)
     except ValueError:

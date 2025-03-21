@@ -7,7 +7,7 @@ import sys
 import datetime
 import concurrent.futures
 
-def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=500):
+def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900):
     url = 'https://pure360-api.pure-yoga.cn/api/v3/booking'
     headers = {
         'Accept': 'application/json, text/plain, */*',
@@ -41,16 +41,13 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=500):
         # Calculate the cutoff time (9:00:00 AM)
         now = datetime.datetime.now()
         cutoff_time = now.replace(hour=9, minute=0, second=0, microsecond=0)
-        
-        max_retries = 10
-        retry_count = 0
+
         booking_success = False
         
-        while retry_count < max_retries and datetime.datetime.now() < cutoff_time and not booking_success:
-            if retry_count > 0:
-                print(f"重试第 {retry_count} 次预约课程 {class_id}...")
-                # Wait 50ms before retrying
-                time.sleep(0.05)
+        while datetime.datetime.now() < cutoff_time and not booking_success:
+            print(f"重试第 {retry_count} 次预约课程 {class_id}...")
+            # Wait 50ms before retrying
+            time.sleep(0.05)
             
             before = time.time()
             response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -117,12 +114,12 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=500):
 
     print(f"将在{hour}时{minute}分{second}秒{1000-early}毫秒开始抢课, 课程编号是{class_ids}")
     print("请确保课程编号和手环编号正确, 已经开始运行")
-    print(f"如果预约失败，将会尝试最多重试 10 次，每次间隔 50 毫秒，直到 9:00:00")
+    print(f"如果预约失败，将会不停尝试, 每次间隔 50 毫秒，直到 9:00:00")
     print(f"所有课程将同时并行预约，互不影响")
     scheduler.add_job(job, 'cron', hour=hour, minute=minute, second=second, misfire_grace_time=60, args=[early])
     scheduler.start()
     
-    print("\n抢课程序已完成，按回车键退出...")
+    print("\n抢课程序已完成, 按回车键退出...")
     input()
 
 if __name__ == "__main__":
