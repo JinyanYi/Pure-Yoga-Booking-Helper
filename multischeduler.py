@@ -41,13 +41,14 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900):
         # Calculate the cutoff time (9:00:00 AM)
         now = datetime.datetime.now()
         cutoff_time = now.replace(hour=9, minute=0, second=0, microsecond=0)
-
+        retry_count = 0
         booking_success = False
         
         while datetime.datetime.now() < cutoff_time and not booking_success:
-            print(f"重试第 {retry_count} 次预约课程 {class_id}...")
-            # Wait 50ms before retrying
-            time.sleep(0.05)
+            if retry_count > 0:
+                print(f"重试第 {retry_count} 次预约课程 {class_id}...")
+                # Wait 50ms before retrying
+                time.sleep(0.05)
             
             before = time.time()
             response = requests.post(url, headers=headers, data=json.dumps(data))
