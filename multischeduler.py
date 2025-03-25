@@ -40,7 +40,7 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900):
         
         # Calculate the cutoff time (9:00:00 AM)
         now = datetime.datetime.now()
-        cutoff_time = now.replace(hour=9, minute=0, second=0, microsecond=0)
+        cutoff_time = now.replace(hour=9, minute=0, second=10, microsecond=0)
         retry_count = 0
         booking_success = False
         
