@@ -40,7 +40,7 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900):
         
         # Calculate the cutoff time (9:00:00 AM)
         now = datetime.datetime.now()
-        cutoff_time = now.replace(hour=9, minute=0, second=10, microsecond=0)
+        cutoff_time = now.replace(hour=9, minute=0, second=5, microsecond=0)
         retry_count = 0
         booking_success = False
         
@@ -115,7 +115,7 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900):
 
     print(f"将在{hour}时{minute}分{second}秒{1000-early}毫秒开始抢课, 课程编号是{class_ids}")
     print("请确保课程编号和手环编号正确, 已经开始运行")
-    print(f"如果预约失败，将会不停尝试, 每次间隔 50 毫秒，直到 9:00:00")
+    print(f"如果预约失败，将会不停尝试, 每次间隔 50 毫秒，直到 9点05秒")
     print(f"所有课程将同时并行预约，互不影响")
     scheduler.add_job(job, 'cron', hour=hour, minute=minute, second=second, misfire_grace_time=60, args=[early])
     scheduler.start()
