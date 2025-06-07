@@ -7,7 +7,7 @@ import sys
 import datetime
 import concurrent.futures
 
-def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900, max_attempts=10):
+def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900, max_attempts=38):
     url = 'https://pure360-api.pure-yoga.cn/api/v3/booking'
     headers = {
         'Accept': 'application/json, text/plain, */*',
@@ -83,7 +83,7 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900, max_attemp
         
         # 计算截止时间 (9:00:05 AM)
         now = datetime.datetime.now()
-        cutoff_time = now.replace(hour=9, minute=0, second=5, microsecond=0)
+        cutoff_time = now.replace(hour=9, minute=0, second=1, microsecond=0)
         
         # 创建一个线程池来管理此课程的多次预约尝试
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_attempts) as executor:
@@ -138,7 +138,7 @@ def run_scheduler(class_ids, x_date, x_jwt_token, x_token, early=900, max_attemp
     print(f"将在{hour}时{minute}分{second}秒{1000-early}毫秒开始抢课, 课程编号是{class_ids}")
     print(f"每个课程将同时发起最多{max_attempts}次并行预约尝试，每次间隔50毫秒")
     print(f"所有课程将同时并行预约，互不影响")
-    print(f"预约截止时间为9点05秒")
+    print(f"预约截止时间为9点01秒")
     scheduler.add_job(job, 'cron', hour=hour, minute=minute, second=second, misfire_grace_time=60, args=[early])
     scheduler.start()
     
@@ -153,5 +153,5 @@ if __name__ == "__main__":
         x_jwt_token = sys.argv[3]
         x_token = sys.argv[4]
         early = int(sys.argv[5]) if len(sys.argv) > 5 else 100
-        max_attempts = int(sys.argv[6]) if len(sys.argv) > 6 else 10  # 默认最多尝试10次
+        max_attempts = int(sys.argv[6]) if len(sys.argv) > 6 else 38  # 默认最多尝试38次
         run_scheduler(class_ids, x_date, x_jwt_token, x_token, early, max_attempts)
